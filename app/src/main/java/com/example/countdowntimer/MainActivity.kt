@@ -1,5 +1,6 @@
 package com.example.countdowntimer
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         var check : Boolean = true
         startStop.text = "Start/Stop"
         reset.text = "Reset"
+        reset.setBackgroundColor(Color.BLACK)
 
 
         startStop.setOnClickListener {
@@ -54,11 +56,13 @@ class MainActivity : AppCompatActivity() {
             stopWatch.setBase(SystemClock.elapsedRealtime() - stopTime)
             stopWatch.start()
             startStop.text = "Stop"
+            startStop.setBackgroundColor(Color.RED)
         }
         else {
             stopTime = SystemClock.elapsedRealtime() - stopWatch.getBase()
             stopWatch.stop()
             startStop.text = "Start"
+            startStop.setBackgroundColor(Color.rgb(92,0,224))
         }
     }
 
