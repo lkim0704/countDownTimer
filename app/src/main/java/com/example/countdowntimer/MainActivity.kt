@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var startStop : Button
     lateinit var reset : Button
     var stopTime: Long = 0
+    var check : Boolean = true
 
     companion object {
         val TAG ="MainActivity"
@@ -26,8 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         wireWidgets()
 
-
-        var check : Boolean = true
         startStop.text = "Start/Stop"
         reset.text = "Reset"
         reset.setBackgroundColor(Color.BLACK)
@@ -70,6 +69,30 @@ class MainActivity : AppCompatActivity() {
         stopWatch.setBase(SystemClock.elapsedRealtime())
         stopWatch.stop()
         stopStart(false)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if(check)
+        {
+            stopTime = SystemClock.elapsedRealtime() - stopWatch.getBase()
+        }
+        outState.putLong("savedTime", stopTime)
+        outState.putBoolean("savedOn", check)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        stopTime = savedInstanceState.getLong("savedTime")
+        check = savedInstanceState.getBoolean("savedOn")
+        stopWatch.setBase(SystemClock.elapsedRealtime() - stopTime)
+        if(check)
+        {
+            stopWatch.start()
+            startStop.text = "Stop"
+            startStop.setBackgroundColor(Color.RED)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
