@@ -15,10 +15,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var startStop : Button
     lateinit var reset : Button
     var stopTime: Long = 0
-    var check : Boolean = true
+    var check : Boolean = false
 
     companion object {
         val TAG ="MainActivity"
+        val BUNDLE_DISPLAYED_TIME = "displayed time"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +34,8 @@ class MainActivity : AppCompatActivity() {
 
 
         startStop.setOnClickListener {
-            stopStart(check)
             check = !check
+            stopStart(check)
         }
 
         reset.setOnClickListener {
@@ -85,14 +86,14 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         stopTime = savedInstanceState.getLong("savedTime")
         check = savedInstanceState.getBoolean("savedOn")
-        stopWatch.setBase(SystemClock.elapsedRealtime() - stopTime)
-        if(check)
-        {
-            stopWatch.start()
-            startStop.text = "Stop"
-            startStop.setBackgroundColor(Color.RED)
+        if(check) {
+            stopStart(check)
         }
-
+        else
+        {
+            stopWatch.base = SystemClock.elapsedRealtime() - stopTime
+            startStop.text = "Start"
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
